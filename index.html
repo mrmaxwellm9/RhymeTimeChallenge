@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhyme Time Challenge</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rhyme Time Challenge</h1>
+        <div id="score">Score: <span id="scoreValue">0</span></div>
+        <div id="timer">Time: <span id="timeLeft"></span></div>
+        <div id="gameArea"></div>
+        <br>
+        <input type="text" id="guessInput" placeholder="Type a word that rhymes">
+        <button id="submitBtn" onclick="submitGuess()">Submit</button>
+        <button id="startBtn" onclick="startGame()">Start Game</button>
+        <br>
+        <div id="notFoundRhymes"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+<!--
+1: A timed mode where players can choose 30 seconds, 1 minute,  or a custom amount of time for a rhyme chain.
+2: A normal difficulty option that starts the chain with a common English word with many words that rhyme. A challenge mode that can be any word. A daily mode that is a 1-minute normal mode question where all users get the same starting word.
+3: A score that shows how many rhymes are found in the chain.
+4: The same rhyme can not be used in the same rhyme chain.
+5: If there are no more available rhymes, inform the player.
+6: When the time runs out display a list of available words that rhyme with the current word in the chain. 
+7: when the user guesses an incorrect rhyme, there should be a beep-beep buzzer sound, the textbox should shake, and the textbox border should be red until the textbox is edited again.
+8: When a correct word is guessed a ding chime should go off and the border becomes green until the textbox is edited again.
+--->

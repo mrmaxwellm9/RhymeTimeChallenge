@@ -1,0 +1,28 @@
+.container {
+    text-align: center;
+}
+
+#gameArea {
+    margin-bottom: 20px;
+}
+
+#score {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#guessInput {
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+#submitBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+#timer {
+    font-size: 18px;
+    margin-top: 20px;
+}
