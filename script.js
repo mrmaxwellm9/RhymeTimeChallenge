@@ -37,6 +37,8 @@ if (!localStorage.getItem('commonWords')) {
 function startGame() {
     clearUsedWords();
     gameOver = false;
+    score = 0;
+    document.getElementById('scoreValue').innerText = score;
     document.getElementById("notFoundRhymes").innerText = '';
 
     startTime = Date.now();
