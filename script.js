@@ -1,11 +1,13 @@
 // Define variables
-let wordsAndRhymes = {}; // Your dictionary of words and rhymes
+let wordSet = []; // Your dictionary of words and rhymes
 let currentWord = '';
 let score = 0;
 let timeLeft;
 let timerInterval;
 let usedWords = [];
 let commonWords = [];
+let startTime;
+let gameOver;
 
 // Check if the words are already stored in localStorage
 if (!localStorage.getItem('commonWords')) {
@@ -32,132 +34,33 @@ if (!localStorage.getItem('commonWords')) {
     commonWords = JSON.parse(localStorage.getItem('commonWords'));
 }
 
-
-// Function to open IndexedDB database
-function openDatabase() {
-    return new Promise((resolve, reject) => {
-        let request = window.indexedDB.open('RhymeDictionary', 1);
-
-        request.onerror = function(event) {
-            console.error("Error opening database:", event.target.error);
-            reject(event.target.error);
-        };
-
-        request.onsuccess = function(event) {
-            let db = event.target.result;
-            resolve(db);
-        };
-
-        request.onupgradeneeded = function(event) {
-            let db = event.target.result;
-            let objectStore = db.createObjectStore('words', { keyPath: 'word' });
-            objectStore.createIndex('rhymes', 'rhymes', { unique: false });
-        };
-    });
-}
-
-// Function to store dictionary in IndexedDB
-function storeDictionary(dictionary) {
-    openDatabase().then(db => {
-        let transaction = db.transaction(['words'], 'readwrite');
-        let objectStore = transaction.objectStore('words');
-
-        // Convert dictionary to array of objects for storage
-        let data = Object.entries(dictionary).map(([word, rhymes]) => ({ word: word, rhymes: JSON.stringify(rhymes) }));
-
-        // Clear existing data
-        objectStore.clear();
-
-        // Add data to object store
-        data.forEach(entry => {
-            objectStore.put(entry);
-        });
-    }).catch(error => console.error("Error opening database:", error));
-}
-
-// Function to load the dictionary from IndexedDB
-function loadDictionary(callback) {
-    openDatabase().then(db => {
-        let transaction = db.transaction(['words'], 'readonly');
-        let objectStore = transaction.objectStore('words');
-        let request = objectStore.getAll();
-
-        request.onsuccess = function(event) {
-            let dictionary = {};
-            event.target.result.forEach(entry => {
-                dictionary[entry.word] = JSON.parse(entry.rhymes);
-            });
-
-            console.log("Dictionary loaded:", dictionary); // Print dictionary to console
-
-            callback(dictionary);
-        };
-
-        request.onerror = function(event) {
-            console.error("Error loading dictionary:", event.target.error);
-        };
-    }).catch(error => console.error("Error opening database:", error));
-}
-
-
-
-// Start the game after loading the dictionary
-loadDictionary(function(dictionary) {
-    if (Object.keys(dictionary).length === 0) {
-        // If dictionary is empty (first time), fetch from file and store in IndexedDB
-        fetch('combined_dictionary.txt') // Adjust path if needed
-            .then(response => response.text())
-            .then(data => {
-                let lines = data.split('\n');
-                let newDictionary = {};
-                lines.forEach(line => {
-                    let parts = line.split(':');
-                    let word = parts[0].trim();
-                    let rhymes = parts[1].trim().slice(1, -1).split(',').map(rhyme => rhyme.trim().replace(/'/g, ''));
-                    newDictionary[word] = rhymes;
-                });
-
-                // Store dictionary in IndexedDB
-                storeDictionary(newDictionary);
-
-                // Use the newly loaded dictionary
-                wordsAndRhymes = newDictionary;
-
-                // Add event listener for daily mode button if it exists
-                let dailyModeBtn = document.getElementById('dailyModeBtn');
-                if (dailyModeBtn) {
-                    dailyModeBtn.addEventListener('click', startDailyMode);
-                }
-            })
-            .catch(error => console.error('Error loading dictionary:', error));
-    } else {
-        // Use dictionary from IndexedDB
-        wordsAndRhymes = dictionary;
-
-        // Add event listener for daily mode button if it exists
-        let dailyModeBtn = document.getElementById('dailyModeBtn');
-        if (dailyModeBtn) {
-            dailyModeBtn.addEventListener('click', startDailyMode);
-        }
-    }
-});
-
-
-// Function to start the game
 function startGame() {
     clearUsedWords();
+    gameOver = false;
     document.getElementById("notFoundRhymes").innerText = '';
 
-    // Choose a random word as the starting word
-    let randomIndex = Math.floor(Math.random() * commonWords.length); // Generate a random index
-    currentWord = commonWords[randomIndex]; // Select a random word from commonWords
+    startTime = Date.now();
+
+    currentWord = commonWords[Math.floor(Math.random() * commonWords.length)];
     displayWord(currentWord);
 
+    // Fetch the word set containing the current word
+    fetch('rhyming_words.txt')
+        .then(response => response.text())
+        .then(data => {
+            // Split the text into an array of lines and filter the lines containing the current word
+            let regex = new RegExp(`\\s${currentWord}(?:\\n|,)`, 'i');
+            wordSet = data.split('\n').filter(line => regex.test(line)).flatMap(line => line.split(/,\s|\n/)).map(word => word.trim());
+        })
+        .catch(error => console.error('Error reading the file:', error));
+
+    usedWords.push(currentWord);
+    
+
     // Set timer based on selected mode
-    let gameTime = 60; // Placeholder, implement logic to set time based on mode
+    let gameTime = 60;
     timeLeft = gameTime;
     updateTimer();
-    timerInterval = setInterval(updateTimer, 1000);
 }
 
 
@@ -183,12 +86,16 @@ function clearUsedWords() {
 
 // Function to update timer
 function updateTimer() {
-    if (timeLeft < 0) {
+    let currentTime = Date.now();
+    let elapsedTime = Math.floor((currentTime - startTime) / 1000); // Convert milliseconds to seconds
+
+    if (elapsedTime > timeLeft) {
         clearInterval(timerInterval);
         endGame();
     } else {
-        document.getElementById('timeLeft').innerText = timeLeft;
-        timeLeft--;
+        let remainingTime = timeLeft - elapsedTime;
+        document.getElementById('timeLeft').innerText = remainingTime;
+        setTimeout(updateTimer, 1000); // Schedule the next iteration after 1 second
     }
 }
 
@@ -197,7 +104,7 @@ function submitGuess() {
     let guess = document.getElementById('guessInput').value.trim().toLowerCase();
     if (guess === '') return;
     // Check if guess is a valid rhyme
-    if (wordsAndRhymes[currentWord].includes(guess) && !usedWords.includes(guess)) {
+    if (!gameOver && wordSet.includes(guess) && !usedWords.includes(guess)) {
         score++;
         document.getElementById('scoreValue').innerText = score;
         new Audio('correct.mp3').play();
@@ -217,6 +124,7 @@ document.getElementById('guessInput').addEventListener('keypress', function(even
 });
 // Function to end the game
 function endGame() {
-    let availableRhymes = wordsAndRhymes[currentWord].filter(rhyme => !usedWords.includes(rhyme));
+    let availableRhymes = wordSet.filter(rhyme => !usedWords.includes(rhyme));
     document.getElementById("notFoundRhymes").innerText = 'Available Rhymes: ' + availableRhymes
+    gameOver = true;
 }
