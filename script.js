@@ -34,6 +34,33 @@ if (!localStorage.getItem('commonWords')) {
     commonWords = JSON.parse(localStorage.getItem('commonWords'));
 }
 
+// Check if the words from rhyming_words.txt are already stored in localStorage
+if (!localStorage.getItem('rhymingWords')) {
+    // Read the content of the "rhyming_words.txt" file
+    fetch('rhyming_words.txt')
+        .then(response => response.text())
+        .then(data => {
+            // Split the text into an array of lines
+            let lines = data.split('\n');
+            let setsArray = [];
+
+            // Iterate over each line and split it into words
+            lines.forEach(line => {
+                let wordsInLine = line.split(',').map(word => word.trim());
+                let lineSet = new Set(wordsInLine);
+                setsArray.push(Array.from(lineSet));
+            });
+
+            // Store the array of sets in the localStorage
+            localStorage.setItem('rhymingWords', JSON.stringify(setsArray));
+
+            console.log('Rhyming words stored in localStorage:', setsArray);
+        })
+        .catch(error => console.error('Error reading the file:', error));
+} else {
+    console.log('Rhyming words already stored in localStorage.');
+}
+
 function startGame() {
     clearUsedWords();
     gameOver = false;
@@ -43,25 +70,54 @@ function startGame() {
 
     startTime = Date.now();
 
-    currentWord = commonWords[Math.floor(Math.random() * commonWords.length)];
-    displayWord(currentWord);
+    let mode = document.querySelector('input[name="mode"]:checked').value;
+    let selectedTimeLimit = document.getElementById('timeLimit').value;
 
-    // Fetch the word set containing the current word
-    fetch('rhyming_words.txt')
-        .then(response => response.text())
-        .then(data => {
-            // Split the text into an array of lines and filter the lines containing the current word
-            let regex = new RegExp(`\\s${currentWord}(?:\\n|,)`, 'i');
-            wordSet = data.split('\n').filter(line => regex.test(line)).flatMap(line => line.split(/,\s|\n/)).map(word => word.trim());
-        })
-        .catch(error => console.error('Error reading the file:', error));
-
-    usedWords.push(currentWord);
+    if (selectedTimeLimit === 'custom') {
+        let customTimeLimit = parseInt(prompt("Enter custom time limit (in seconds):"));
+        if (!isNaN(customTimeLimit)) {
+            timeLeft = customTimeLimit;
+        } else {
+            timeLeft = 60; // Default to 60 seconds if invalid input or canceled
+        }
+    } else {
+        timeLeft = parseInt(selectedTimeLimit);
+    }
     
-
-    // Set timer based on selected mode
-    let gameTime = 60;
-    timeLeft = gameTime;
+    if (mode === 'normal') {
+        // Retrieve a random word from commonWords for normal mode
+        currentWord = commonWords[Math.floor(Math.random() * commonWords.length)];
+        let storedRhymingWords = JSON.parse(localStorage.getItem('rhymingWords'));
+    
+        if (storedRhymingWords) {
+            // Filter rhyming words based on the current word
+            let regex = new RegExp(`\\b${currentWord}(?:,|\\n|$)`, 'i');
+            wordSet = storedRhymingWords.find(line => line.some(word => regex.test(word)));
+        } else {
+            console.error('Rhyming words not found in localStorage.');
+        }
+    
+        displayWord(currentWord);
+        usedWords.push(currentWord);
+    } else if (mode === 'challenge') {
+        // Retrieve all rhyming words from localStorage
+        let storedRhymingWords = JSON.parse(localStorage.getItem('rhymingWords'));
+    
+        if (storedRhymingWords) {
+            // Select a random line from the stored rhyming words
+            let randomLine = storedRhymingWords[Math.floor(Math.random() * storedRhymingWords.length)];
+            wordSet = randomLine;
+            // Select a random word from the line
+            currentWord = randomLine[Math.floor(Math.random() * randomLine.length)];
+            displayWord(currentWord);
+            usedWords.push(currentWord);
+        } else {
+            console.error('Rhyming words not found in localStorage.');
+        }
+    }
+    
+    
+    
     updateTimer();
 }
 
@@ -106,6 +162,8 @@ function submitGuess() {
     let guess = document.getElementById('guessInput').value.trim().toLowerCase();
     if (guess === '') return;
     // Check if guess is a valid rhyme
+    console.log(wordSet);
+    console.log(usedWords);
     if (!gameOver && wordSet.includes(guess) && !usedWords.includes(guess)) {
         score++;
         document.getElementById('scoreValue').innerText = score;

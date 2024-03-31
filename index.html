@@ -9,6 +9,21 @@
 <body>
     <div class="container">
         <h1>Rhyme Time Challenge</h1>
+        <p>Select a mode:</p>
+        <div>
+            <input type="radio" id="normalMode" name="mode" value="normal" checked>
+            <label for="normalMode">Normal Mode</label>
+        </div>
+        <div>
+            <input type="radio" id="challengeMode" name="mode" value="challenge">
+            <label for="challengeMode">Challenge Mode</label>
+        </div>
+        <p>Select time limit:</p>
+        <select id="timeLimit">
+            <option value="30">30 seconds</option>
+            <option value="60">1 minute</option>
+            <option value="custom">Custom</option>
+        </select>
         <div id="score">Score: <span id="scoreValue">0</span></div>
         <div id="timer">Time: <span id="timeLeft"></span></div>
         <div id="gameArea"></div>
@@ -18,16 +33,17 @@
         <button id="startBtn" onclick="startGame()">Start Game</button>
         <br>
         <div id="notFoundRhymes"></div>
+        <br>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
 <!--
 Goals:
 1: A timed mode where players can choose 30 seconds, 1 minute,  or a custom amount of time for a rhyme chain.
 2: A normal difficulty option that starts the chain with a common English word with many words that rhyme. A challenge mode that can be any word. A daily mode that is a 1-minute normal mode question where all users get the same starting word.
-5: If there are no more available rhymes, inform the player.
+5: If there are no more available rhymes, inform the player and play a celebration song.
 --->
