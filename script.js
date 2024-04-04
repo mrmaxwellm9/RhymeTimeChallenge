@@ -185,5 +185,6 @@ document.getElementById('guessInput').addEventListener('keypress', function(even
 function endGame() {
     let availableRhymes = wordSet.filter(rhyme => !usedWords.includes(rhyme));
     document.getElementById("notFoundRhymes").innerText = 'Available Rhymes:\n' + availableRhymes.join(', ');
+    new Audio('game_over.mp3').play();
     gameOver = true;
 }
