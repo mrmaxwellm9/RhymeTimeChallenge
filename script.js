@@ -116,8 +116,7 @@ function startGame() {
         }
     }
     
-    
-    
+   
     updateTimer();
 }
 
@@ -185,6 +184,6 @@ document.getElementById('guessInput').addEventListener('keypress', function(even
 // Function to end the game
 function endGame() {
     let availableRhymes = wordSet.filter(rhyme => !usedWords.includes(rhyme));
-    document.getElementById("notFoundRhymes").innerText = 'Available Rhymes: ' + availableRhymes
+    document.getElementById("notFoundRhymes").innerText = 'Available Rhymes:\n' + availableRhymes.join(', ');
     gameOver = true;
 }

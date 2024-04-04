@@ -26,3 +26,21 @@
     font-size: 18px;
     margin-top: 20px;
 }
+
+#notFoundRhymes {
+    text-align: center;
+    width: 450px;
+    margin: 0 auto; /* Center horizontally */
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  
+  /* Media query for mobile devices */
+  @media only screen and (max-width: 600px) {
+    #notFoundRhymes {
+        width: 90%;
+        margin: 0 auto; /* Center horizontally */
+        word-wrap: break-word;
+        text-align: center;
+    }
+  }
