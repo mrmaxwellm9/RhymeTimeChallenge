@@ -12,9 +12,9 @@ body {
 
 #information {
     position: absolute;
-    top: 1em;
+    top: 1.25em;
     left: 26%;
-    font-size: 1.5em;
+    font-size: 2em;
     cursor: pointer;
     color: rgb(85,86,90);
 }
