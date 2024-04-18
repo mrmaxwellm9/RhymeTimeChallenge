@@ -70,11 +70,11 @@ function startGame() {
 
     startTime = Date.now();
 
-    let mode = document.querySelector('input[name="mode"]:checked').value;
-    let selectedTimeLimit = document.getElementById('timeLimit').value;
+    let mode = $('#mode .cursor-pointer.active').text();
+    let selectedTimeLimit = $('#time .cursor-pointer.active').text();
 
-    if (selectedTimeLimit === 'custom') {
-        let customTimeLimit = parseInt(prompt("Enter custom time limit (in seconds):"));
+    if (selectedTimeLimit === 'Custom') {
+        let customTimeLimit = $('.form-control').val();
         if (!isNaN(customTimeLimit)) {
             timeLeft = customTimeLimit;
         } else {
@@ -84,7 +84,7 @@ function startGame() {
         timeLeft = parseInt(selectedTimeLimit);
     }
     
-    if (mode === 'normal') {
+    if (mode === 'Normal Mode') {
         // Retrieve a random word from commonWords for normal mode
         currentWord = commonWords[Math.floor(Math.random() * commonWords.length)];
         let storedRhymingWords = JSON.parse(localStorage.getItem('rhymingWords'));
@@ -99,7 +99,7 @@ function startGame() {
     
         displayWord(currentWord);
         usedWords.push(currentWord);
-    } else if (mode === 'challenge') {
+    } else if (mode === 'Challenge Mode') {
         // Retrieve all rhyming words from localStorage
         let storedRhymingWords = JSON.parse(localStorage.getItem('rhymingWords'));
     
@@ -187,4 +187,15 @@ function endGame() {
     document.getElementById("notFoundRhymes").innerText = 'Available Rhymes:\n' + availableRhymes.join(', ');
     new Audio('game_over.mp3').play();
     gameOver = true;
+}
+
+function setActive(clickedElement) {
+    $(clickedElement).siblings('.cursor-pointer').removeClass('active');
+    $(clickedElement).siblings('.custom-input-column').find('span').removeClass('active');
+    $(clickedElement).addClass('active');
+}
+
+function setActiveCustom(clickedElement) {
+    $(clickedElement).parent().parent().parent().siblings('.cursor-pointer').removeClass('active');
+    $(clickedElement).addClass('active');
 }

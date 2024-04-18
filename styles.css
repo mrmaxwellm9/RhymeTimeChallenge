@@ -1,14 +1,52 @@
-.container {
-    text-align: center;
+body {
+    background-color: rgb(50,51,55);
+}
+
+.top-left-image {
+    position: absolute;
+    top: 2%;
+    left: 20%;
+    width: 4%;
+    height: auto;
+}
+
+#information {
+    position: absolute;
+    top: 1em;
+    left: 26%;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: rgb(85,86,90);
+}
+
+#mode {
+    background-color: rgb(44,45,49);
+    color: rgb(85,86,90);
+    border-top-left-radius: 1rem !important;
+    border-bottom-left-radius: 1rem !important;
+}
+
+#time {
+    background-color: rgb(44,45,49);
+    color: rgb(85,86,90);
+    border-top-right-radius: 1rem !important;
+    border-bottom-right-radius: 1rem !important;
+}
+
+.input-group-text {
+    background-color: rgb(50,51,55);
+    border: 0;
 }
 
 #gameArea {
     margin-bottom: 20px;
+    color: rgb(85,86,90);
 }
 
 #score {
     font-size: 18px;
     margin-bottom: 10px;
+    color: rgb(85,86,90);
 }
 
 #guessInput {
@@ -25,6 +63,7 @@
 #timer {
     font-size: 18px;
     margin-top: 20px;
+    color: rgb(85,86,90);
 }
 
 #notFoundRhymes {
@@ -33,14 +72,63 @@
     margin: 0 auto; /* Center horizontally */
     word-wrap: break-word;
     white-space: normal;
+    color: rgb(85,86,90);
   }
   
-  /* Media query for mobile devices */
-  @media only screen and (max-width: 600px) {
+.custom-input-column {
+    width: 44%; 
+}
+
+.col-auto.border-left {
+    width: 31%;
+    padding-right: 0%;
+}
+
+.custom-input-group {
+    height: 60%;
+    flex-wrap: nowrap;
+    flex-grow: 0;
+    width: auto;
+}
+
+.custom-input-group .form-control {
+    height: 100%;
+}
+
+
+.active {
+    color: rgb(226, 183, 20);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.container {
+    overflow-x: hidden;
+}
+
+@media only screen and (max-width: 750px) {
     #notFoundRhymes {
         width: 90%;
         margin: 0 auto; /* Center horizontally */
         word-wrap: break-word;
         text-align: center;
+    }
+    #time {
+        border-top-left-radius: 1rem !important;
+        border-bottom-left-radius: 1rem !important;
+    }
+    #mode {
+        border-top-right-radius: 1rem !important;
+        border-bottom-right-radius: 1rem !important;
+    }
+    .col-auto.border-left {
+        width: 65.157%;
+        border-left: none !important;
+    }
+
+    .custom-input-column {
+        width: 46%; 
     }
   }

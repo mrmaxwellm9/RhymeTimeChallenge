@@ -4,26 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rhyme Time Challenge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    
 </head>
 <body>
-    <div class="container">
-        <h1>Rhyme Time Challenge</h1>
-        <p>Select a mode:</p>
-        <div>
-            <input type="radio" id="normalMode" name="mode" value="normal" checked>
-            <label for="normalMode">Normal Mode</label>
+    <img src="logo.png" alt="Logo" class="top-left-image">
+    <i class="fa fa-info" id="information" aria-hidden="true"></i>
+    <div class="container text-center">
+        <div class="row justify-content-center" style="padding-top: 7%;">
+            <!-- Modes column -->
+            <div class="col-auto d-flex flex-column">
+                <div id="mode" class="row flex-grow-1">
+                    <div onclick="setActive(this)" class="rounded-left col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer active">Normal Mode</div>
+                    <div onclick="setActive(this)" id="challengeMode" class="col-autop-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer">Challenge Mode</div>
+                </div>
+            </div>
+            <!-- Time column -->
+            <div class="col-auto border-left">
+                <div id="time" class="row time">
+                    <div onclick="setActive(this)" id="thirtySec" class="col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer active">30 seconds</div>
+                    <div onclick="setActive(this)" class="col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer">60 seconds</div>
+                    <div class="col-auto p-0 pl-2 pr-2 d-inline-flex align-items-center justify-content-center custom-input-column rounded-right">
+                        <div class="input-group custom-input-group">
+                            <div class="input-group-prepend">
+                                <span onclick="setActiveCustom(this)" class="input-group-text cursor-pointer" id="inputGroup-sizing-default">Custom</span>
+                            </div>
+                            <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <input type="radio" id="challengeMode" name="mode" value="challenge">
-            <label for="challengeMode">Challenge Mode</label>
-        </div>
-        <p>Select time limit:</p>
-        <select id="timeLimit">
-            <option value="30">30 seconds</option>
-            <option value="60">1 minute</option>
-            <option value="custom">Custom</option>
-        </select>
+       
         <div id="score">Score: <span id="scoreValue">0</span></div>
         <div id="timer">Time: <span id="timeLeft"></span></div>
         <div id="gameArea"></div>
@@ -35,6 +51,9 @@
         <div id="notFoundRhymes"></div>
         <br>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </body>
 </html>
@@ -42,8 +61,11 @@
 
 
 <!--
-Goals:
-1: A timed mode where players can choose 30 seconds, 1 minute,  or a custom amount of time for a rhyme chain.
-2: A normal difficulty option that starts the chain with a common English word with many words that rhyme. A challenge mode that can be any word. A daily mode that is a 1-minute normal mode question where all users get the same starting word.
-5: If there are no more available rhymes, inform the player and play a celebration song.
+To do:
+1: make compatible with mobile and different screen sizes
+2: Make the info popout
+3: make the submit, start, and enter rhyme area look more consisten
+4: When the avalible rhymes show up make it a click to show/hide
+5: Add Daily
+6: Track daily progress based off progress/score
 --->
