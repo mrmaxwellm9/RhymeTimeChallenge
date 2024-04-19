@@ -199,3 +199,26 @@ function setActiveCustom(clickedElement) {
     $(clickedElement).parent().parent().parent().siblings('.cursor-pointer').removeClass('active');
     $(clickedElement).addClass('active');
 }
+
+// Get the information icon and the popup
+var informationIcon = document.getElementById("information");
+var infoPopup = document.getElementById("infoPopup");
+
+// When the information icon is clicked, toggle the popup
+informationIcon.addEventListener("click", function(event) {
+    event.stopPropagation(); // Prevent the click event from propagating to the window
+    infoPopup.classList.toggle("open");
+});
+
+// Close the popup when clicking outside of it
+window.addEventListener("click", function(event) {
+    if (!infoPopup.contains(event.target) && infoPopup.classList.contains("open")) {
+        infoPopup.classList.remove("open");
+    }
+});
+
+// When the close button is clicked, hide the popup
+var closeButton = document.querySelector(".popup .close");
+closeButton.addEventListener("click", function() {
+    infoPopup.classList.remove("open");
+});

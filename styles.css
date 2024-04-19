@@ -108,6 +108,39 @@ body {
     overflow-x: hidden;
 }
 
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Popup content */
+.popup-content {
+    position: relative;
+}
+
+/* Close button */
+.close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    padding-right: 6px;
+}
+
+
+/* Show the popup when it's active */
+.popup.open {
+    display: block;
+}
+
 @media only screen and (max-width: 1200px) {
     #notFoundRhymes {
         width: 90%;
