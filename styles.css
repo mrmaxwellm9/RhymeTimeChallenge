@@ -12,9 +12,9 @@ body {
 
 #information {
     position: absolute;
-    top: 1.25em;
+    top: 4.25%;
     left: 26%;
-    font-size: 2em;
+    font-size: 32px;
     cursor: pointer;
     color: rgb(85,86,90);
 }
@@ -108,7 +108,41 @@ body {
     overflow-x: hidden;
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 1200px) {
+    #notFoundRhymes {
+        width: 90%;
+        margin: 0 auto; /* Center horizontally */
+        word-wrap: break-word;
+        text-align: center;
+    }
+
+    .col-auto.border-left {
+        width: 36%;
+    }
+
+    .custom-input-column {
+        width: 45%; 
+    }
+  }
+
+  @media only screen and (max-width: 991px) {
+    #notFoundRhymes {
+        width: 90%;
+        margin: 0 auto; /* Center horizontally */
+        word-wrap: break-word;
+        text-align: center;
+    }
+
+    .col-auto.border-left {
+        width: 48.5%;
+    }
+
+    .custom-input-column {
+        width: 45%; 
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
     #notFoundRhymes {
         width: 90%;
         margin: 0 auto; /* Center horizontally */
@@ -117,18 +151,67 @@ body {
     }
     #time {
         border-top-left-radius: 1rem !important;
-        border-bottom-left-radius: 1rem !important;
+        border-bottom-left-radius: 1rem !important;  
     }
     #mode {
         border-top-right-radius: 1rem !important;
         border-bottom-right-radius: 1rem !important;
     }
     .col-auto.border-left {
-        width: 65.157%;
+        width: 65%;
         border-left: none !important;
     }
-
     .custom-input-column {
-        width: 46%; 
+        width: 45%; 
+    }
+  }
+
+  @media only screen and (max-width: 507px) {
+    #notFoundRhymes {
+        width: 90%;
+        margin: 0 auto; /* Center horizontally */
+        word-wrap: break-word;
+        text-align: center;
+    }
+    #time {
+        border-top-left-radius: 1rem !important;
+        border-bottom-left-radius: 1rem !important;  
+    }
+    #mode {
+        border-top-right-radius: 1rem !important;
+        border-bottom-right-radius: 1rem !important;
+    }
+    .col-auto.border-left {
+        width: 69%;
+        border-left: none !important;
+    }
+    .custom-input-column {
+        width: 45%; 
+    }
+  }
+
+  @media only screen and (max-width: 477px) {
+    .col-auto {
+        width: 100%;
+        padding-right: 0 !important;
+        padding-left: 0 !important;
+        text-align: center;
+    }
+    .row.justify-content-center{
+        width: 50%;
+        position: relative;
+        left: 25%;
+    }
+    .col-auto.border-left {
+        width: 100%;
+        border-left: none !important;
+    }
+    .custom-input-column {
+        width: 57%; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .form-control {
+        width: 66.88px !important;
     }
   }
