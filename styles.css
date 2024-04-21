@@ -127,7 +127,6 @@ body {
     border: none;
 }
 
-
 .popup {
     display: none;
     position: fixed;
@@ -160,10 +159,34 @@ body {
     color:rgb(226, 183, 20);
 }
 
-
 /* Show the popup when it's active */
 .popup.open {
     display: block;
+}
+
+#showRhymesBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(44, 45, 49);
+    color: rgb(85, 86, 90);
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease; 
+    outline: none;
+}
+
+#showRhymesBtn.active {
+    color: rgb(226, 183, 20); 
+}
+
+#showRhymesBtn:hover {
+    background-color: rgb(60, 61, 65);
+}
+
+.hidden {
+    display: none;
 }
 
 @media only screen and (max-width: 1200px) {

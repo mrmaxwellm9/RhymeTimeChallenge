@@ -184,7 +184,13 @@ document.getElementById('guessInput').addEventListener('keypress', function(even
 // Function to end the game
 function endGame() {
     let availableRhymes = wordSet.filter(rhyme => !usedWords.includes(rhyme));
-    document.getElementById("notFoundRhymes").innerText = 'Available Rhymes:\n' + availableRhymes.join(', ');
+    let rhymesDisplay = document.getElementById("notFoundRhymes");
+    if (document.getElementById("showRhymesBtn").classList.contains("active")) {
+        rhymesDisplay.innerText = 'Available Rhymes:\n' + availableRhymes.join(', ');
+        rhymesDisplay.classList.remove("hidden");
+    } else {
+        rhymesDisplay.classList.add("hidden");
+    }
     new Audio('game_over.mp3').play();
     gameOver = true;
 }
@@ -222,3 +228,19 @@ var closeButton = document.querySelector(".popup .close");
 closeButton.addEventListener("click", function() {
     infoPopup.classList.remove("open");
 });
+
+function toggleRhymes() {
+    let rhymesDisplay = document.getElementById("notFoundRhymes");
+    rhymesDisplay.classList.toggle("hidden");
+    let showRhymesBtn = document.getElementById("showRhymesBtn");
+    showRhymesBtn.classList.toggle("active");
+    if (gameOver) {
+        let availableRhymes = wordSet.filter(rhyme => !usedWords.includes(rhyme));
+        if (showRhymesBtn.classList.contains("active")) {
+            rhymesDisplay.innerText = 'Available Rhymes:\n' + availableRhymes.join(', ');
+            rhymesDisplay.classList.remove("hidden");
+        } else {
+            rhymesDisplay.classList.add("hidden");
+        }
+    }
+}
