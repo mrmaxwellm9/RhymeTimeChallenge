@@ -18,15 +18,16 @@
             <!-- Modes column -->
             <div class="col-auto d-flex flex-column">
                 <div id="mode" class="row flex-grow-1">
-                    <div onclick="setActive(this)" class="rounded-left col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer active">Normal Mode</div>
+                    <div onclick="setActive(this)" id="normalMode" class="selectedBg col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer active">Normal Mode</div>
                     <div onclick="setActive(this)" id="challengeMode" class="col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer">Challenge Mode</div>
+                    <div onclick="setActive(this)" id="dailyMode" class="col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer daily" >Daily Mode</div>
                 </div>
             </div>
             <!-- Time column -->
             <div class="col-auto border-left">
                 <div id="time" class="row time">
-                    <div onclick="setActive(this)" id="thirtySec" class="col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer active">30 seconds</div>
-                    <div onclick="setActive(this)" class="col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer">60 seconds</div>
+                    <div onclick="setActive(this)" id="thirtySec" class="selectedBg col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer active">30 seconds</div>
+                    <div onclick="setActive(this)" id="sixtySec" class="col-auto p-0 pl-2 pr-2 d-flex align-items-center justify-content-center cursor-pointer">60 seconds</div>
                     <div class="col-auto p-0 pl-2 pr-2 d-inline-flex align-items-center justify-content-center custom-input-column rounded-right">
                         <div class="input-group custom-input-group">
                             <div class="input-group-prepend">
@@ -55,14 +56,14 @@
         <span class="close">&times;</span>
         <div class="popup-content">
             <p id="infoText">
-                <strong>Instructions:</strong><br>
-                1. Select the game mode and duration, then press "Start Game" to begin.<br>
-                2. When the game starts, a word will be displayed above the submission field.<br>
-                3. You have the selected time to submit as many words as possible that rhyme with the given word.<br>
-                4. To submit a word, press Enter or click the "Submit" button.<br>
-                5. Each correct rhyme will trigger a chime sound, increase your score by one, and display the word next to the starting word.<br>
-                6. Incorrect words will trigger a buzzer sound.<br>
-                <strong>Additional Information:</strong><br>
+                <strong><span class="active">Instructions:</span></strong><br>
+                <span class="active">1.</span> Select the game mode and duration, then press "Start Game" to begin.<br>
+                <span class="active">2.</span> When the game starts, a word will be displayed above the submission field.<br>
+                <span class="active">3.</span> You have the selected time to submit as many words as possible that rhyme with the given word.<br>
+                <span class="active">4.</span> To submit a word, press Enter or click the "Submit" button.<br>
+                <span class="active">5.</span> Each correct rhyme will trigger a chime sound, increase your score by one, and display the word next to the starting word.<br>
+                <span class="active">6.</span> Incorrect words will trigger a buzzer sound.<br>
+                <strong><span class="active">Additional Information:</span></strong><br>
                 - It's nearly impossible to guess every rhyme for most words, so don't get discouraged if you miss a lot.<br>
                 - The word list is sourced from the CMU Pronouncing Dictionary, and the rhymes are generated using API Ninja's Rhyme API.
             </p>
@@ -79,6 +80,8 @@
 
 <!--
 To do:
-5: Add Daily
-6: Track daily progress based off progress/score
+1: Volume bar
+5: Make daily words unique through the list
+6: Fix bug for slecting custom then time then custom then time
+7: Formate images better for smaller screens
 --->

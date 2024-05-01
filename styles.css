@@ -25,6 +25,11 @@ body {
     border-bottom-left-radius: 1rem !important;
 }
 
+#normalMode {
+    border-top-left-radius: 1rem !important;
+    border-bottom-left-radius: 1rem !important;
+}
+
 #time {
     background-color: rgb(44,45,49);
     color: rgb(85,86,90);
@@ -179,14 +184,29 @@ body {
 
 #showRhymesBtn.active {
     color: rgb(226, 183, 20); 
+    background-color: rgb(60, 61, 65);
 }
 
+#normalMode:hover,
+#challengeMode:hover,
+.daily:hover,
+#thirtySec:hover,
+#sixtySec:hover,
+#inputGroup-sizing-default:hover,
 #showRhymesBtn:hover {
+    background-color: rgb(60, 61, 65);
+}
+
+.selectedBg {
     background-color: rgb(60, 61, 65);
 }
 
 .hidden {
     display: none;
+}
+
+.crossed-out {
+    text-decoration: line-through;
 }
 
 @media only screen and (max-width: 1200px) {

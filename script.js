@@ -61,6 +61,30 @@ if (!localStorage.getItem('rhymingWords')) {
     console.log('Rhyming words already stored in localStorage.');
 }
 
+const storedDailyWord = localStorage.getItem('dailyWord');
+if (storedDailyWord) {
+    // Compare the stored daily word with the current daily word
+    if (storedDailyWord === selectDailyWord()) {
+        // Disable the daily mode button if the stored daily word matches the current daily word
+        $('#dailyMode').attr('onclick', '');
+        $('#dailyMode').addClass('crossed-out');
+        $('#dailyMode').removeClass('active');
+    }
+}
+
+function getRandomNumber(seed, max) {
+    const dateSeed = new Date(seed).toISOString().slice(0,10).replace(/-/g,""); // Convert date to string
+    const numSeed = parseInt(dateSeed);
+    return Math.floor(Math.abs(Math.sin(numSeed) * max));
+}
+
+// Function to select the daily word based on the current date
+function selectDailyWord() {
+    const today = new Date();
+    const wordIndex = getRandomNumber(today, commonWords.length);
+    return commonWords[wordIndex];
+}
+
 function startGame() {
     clearUsedWords();
     gameOver = false;
@@ -84,7 +108,16 @@ function startGame() {
         timeLeft = parseInt(selectedTimeLimit);
     }
     
-    if (mode === 'Normal Mode') {
+    if (mode === 'Daily Mode') {
+        let currentWord = selectDailyWord();
+
+        let storedRhymingWords = JSON.parse(localStorage.getItem('rhymingWords'));
+        let regex = new RegExp(`\\b${currentWord}(?:,|\\n|$)`, 'i');
+        wordSet = storedRhymingWords.find(line => line.some(word => regex.test(word)));
+        
+        displayWord(currentWord);
+        usedWords.push(currentWord);
+    } else if (mode === 'Normal Mode') {
         // Retrieve a random word from commonWords for normal mode
         currentWord = commonWords[Math.floor(Math.random() * commonWords.length)];
         let storedRhymingWords = JSON.parse(localStorage.getItem('rhymingWords'));
@@ -116,7 +149,6 @@ function startGame() {
         }
     }
     
-   
     updateTimer();
 }
 
@@ -191,14 +223,49 @@ function endGame() {
     } else {
         rhymesDisplay.classList.add("hidden");
     }
+    if ($('#mode .cursor-pointer.active').text() === 'Daily Mode') {
+        localStorage.setItem('dailyWord', selectDailyWord());
+        $('#dailyMode').attr('onclick', '');
+        $('#dailyMode').addClass('crossed-out');
+        $('#dailyMode').removeClass('active');
+        $('#dailyMode').removeClass('daily');
+        $('#time .cursor-pointer').prop('disabled', false);
+        $('#thirtySec, #inputGroup-sizing-default').removeClass('crossed-out'); 
+        $('#time .cursor-pointer').attr('onclick', 'setActive(this)');
+        $('#time .custom-input-group input').prop('disabled', false);
+        $('#normalMode').addClass('active');
+    }
     new Audio('game_over.mp3').play();
     gameOver = true;
 }
 
 function setActive(clickedElement) {
     $(clickedElement).siblings('.cursor-pointer').removeClass('active');
+    $(clickedElement).siblings('.cursor-pointer').removeClass('selectedBg');
     $(clickedElement).siblings('.custom-input-column').find('span').removeClass('active');
     $(clickedElement).addClass('active');
+    $(clickedElement).addClass('selectedBg');
+        // If Daily Mode is selected, set the time limit to 60 seconds and disable time selection
+    if ($(clickedElement).text() === 'Daily Mode') {
+        $('#time .cursor-pointer').removeClass('active'); // Remove active class from all time options
+        $('#time .cursor-pointer').attr('onclick', ''); // Remove onclick attribute from all time options
+        $('#time .cursor-pointer').prop('disabled', true); // Disable all time options
+        $('#thirtySec, #inputGroup-sizing-default').addClass('crossed-out');
+        $('#time .cursor-pointer').removeClass('active'); // Remove active class from all time options
+        $('#time .cursor-pointer').removeClass('selectedBg');
+        $('#time .custom-input-group input').prop('disabled', true); // Disable custom time input
+        $('#time .custom-input-group input').val(''); // Clear custom time input
+        $('#time .custom-input-group span').removeClass('active'); // Remove active class from custom time label
+        $('#time .custom-input-group span').removeClass('selectedBg');
+        $('#sixtySec').addClass('active');
+        $('#sixtySec').addClass('selectedBg');
+    } else {
+        // If other modes are selected, enable time selection
+        $('#time .cursor-pointer').prop('disabled', false);
+        $('#thirtySec, #inputGroup-sizing-default').removeClass('crossed-out'); 
+        $('#time .cursor-pointer').attr('onclick', 'setActive(this)');
+        $('#time .custom-input-group input').prop('disabled', false);
+    }
 }
 
 function setActiveCustom(clickedElement) {
@@ -234,6 +301,7 @@ function toggleRhymes() {
     rhymesDisplay.classList.toggle("hidden");
     let showRhymesBtn = document.getElementById("showRhymesBtn");
     showRhymesBtn.classList.toggle("active");
+    showRhymesBtn.classList.toggle("selectedBg");
     if (gameOver) {
         let availableRhymes = wordSet.filter(rhyme => !usedWords.includes(rhyme));
         if (showRhymesBtn.classList.contains("active")) {
